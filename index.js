@@ -46,12 +46,14 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    const dataCollection = client.db("form").collection("contactRequest");
-console.log('connect')
+    const FormDataCollection = client.db("form").collection("contactRequest");
     //File Post with data
     app.post("/api/uploads", upload.single("file"), function (req, res) {
       const file = req.file;
       const body = req.body;
+console.log('file',file)
+console.log('body',body)
+
       const addedData = {
         firstName: body?.firstName,
         lastName: body?.lastName,
@@ -60,6 +62,7 @@ console.log('connect')
         message: body?.message1,
         fileName: file?.filename,
       };
+      console.log('addeddData',addedData)
       let transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -107,13 +110,13 @@ console.log('connect')
           return res.send(info.response);
         }
       });
-      const result = dataCollection.insertOne(addedData);
+      const result = FormDataCollection.insertOne(addedData);
       return res.send({ success: true, result });
     });
 
     //Get
     app.get("/contact", async (req, res) => {
-      const contactRequest = await dataCollection.find().toArray();
+      const contactRequest = await FormDataCollection.find().toArray();
       res.send(contactRequest);
     });
   } finally {
