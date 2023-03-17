@@ -48,11 +48,11 @@ async function run() {
     await client.connect();
     const FormDataCollection = client.db("form").collection("contactRequest");
     //File Post with data
-    app.post("/api/uploads", upload.single("file"), function (req, res) {
+
+    
+    app.post("/connect", upload.single("file"), function (req, res) {
       const file = req.file;
       const body = req.body;
-console.log('file',file)
-console.log('body',body)
 
       const addedData = {
         firstName: body?.firstName,
@@ -62,7 +62,6 @@ console.log('body',body)
         message: body?.message1,
         fileName: file?.filename,
       };
-      console.log('addeddData',addedData)
       let transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
